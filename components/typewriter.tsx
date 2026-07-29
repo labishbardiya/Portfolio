@@ -6,6 +6,7 @@ type TypewriterProps = {
   phrases: readonly string[];
 };
 
+// Separate timings keep the motion readable while giving the completed phrase a moment to land.
 const TYPING_DELAY = 48;
 const DELETING_DELAY = 26;
 const HOLD_DELAY = 1450;
@@ -19,6 +20,7 @@ export function Typewriter({ phrases }: TypewriterProps) {
     const phrase = phrases[phraseIndex];
     const complete = visibleText === phrase;
     const empty = visibleText.length === 0;
+    // Pause only after a phrase has fully appeared; otherwise type or erase one character at a time.
     const delay = complete && !deleting ? HOLD_DELAY : deleting ? DELETING_DELAY : TYPING_DELAY;
 
     const timeout = window.setTimeout(() => {
