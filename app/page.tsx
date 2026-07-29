@@ -1,7 +1,7 @@
 import { SocialLinks } from "@/components/social-links";
 import { Timeline } from "@/components/timeline";
 import { Typewriter } from "@/components/typewriter";
-import { awards, draftTypewriterPhrases, experience } from "@/data/home";
+import { awards, experience, typewriterPhrases } from "@/data/home";
 
 export default function HomePage() {
   return (
@@ -9,7 +9,7 @@ export default function HomePage() {
       <section className="hero page-shell">
         <SocialLinks />
         <h1>Hi, I&apos;m Labish.</h1>
-        <Typewriter phrases={draftTypewriterPhrases} />
+        <Typewriter phrases={typewriterPhrases} />
       </section>
 
       <section className="timeline-grid page-shell" aria-label="Experience and awards">

@@ -1,4 +1,4 @@
-export const draftTypewriterPhrases = [
+export const typewriterPhrases = [
   "Curious by default, building by instinct.",
   "Thinking in systems, building with heart.",
   "Finding the human side of technology.",
