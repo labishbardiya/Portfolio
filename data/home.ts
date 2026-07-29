@@ -1,10 +1,11 @@
 export const draftTypewriterPhrases = [
   "Curious by default, building by instinct.",
-  "Big questions, prototypes, and late nights.",
+  "Thinking in systems, building with heart.",
+  "Finding the human side of technology.",
   "Turning research into things people can use.",
-  "Learning fast and building with intention.",
   "Chasing ideas worth making real.",
   "Somewhere between code, care, and curiosity.",
+  "Learning in public, making things real.",
 ] as const;
 
 export const experience = [
