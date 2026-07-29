@@ -1,3 +1,4 @@
+import { HeroGraphic } from "@/components/hero-graphic";
 import { SocialLinks } from "@/components/social-links";
 import { Timeline } from "@/components/timeline";
 import { Typewriter } from "@/components/typewriter";
@@ -7,9 +8,13 @@ export default function HomePage() {
   return (
     <main>
       <section className="hero page-shell">
-        <SocialLinks />
-        <h1>Hi, I&apos;m Labish.</h1>
-        <Typewriter phrases={typewriterPhrases} />
+        <div className="hero-copy">
+          <p className="hero-kicker"><span /> Currently making useful things</p>
+          <SocialLinks />
+          <h1>Hi, I&apos;m Labish.</h1>
+          <Typewriter phrases={typewriterPhrases} />
+        </div>
+        <HeroGraphic />
       </section>
 
       <section className="timeline-grid page-shell" aria-label="Experience and awards">
