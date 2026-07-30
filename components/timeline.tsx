@@ -7,11 +7,11 @@ export function Timeline({ title, items }: { title: string; items: TimelineItem[
       <ol className="timeline">
         {items.map((item) => (
           <li key={`${item.title}-${item.organisation}`}>
-            <p className="timeline-period">{item.period}</p>
             <div>
               <h3>{item.title}</h3>
               <p className="timeline-organisation">{item.organisation}</p>
-              <p>{item.description}</p>
+              <p className="timeline-detail">{item.description}</p>
+              <p className="timeline-period">{item.period}</p>
             </div>
           </li>
         ))}

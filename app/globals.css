@@ -197,22 +197,20 @@ h1, h2, h3, p { margin-top: 0; }
 .status-grid b { color: var(--sky); font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.66rem; }
 .status-caption { margin: 0; padding: 12px 16px; border-top: 1px solid var(--line-soft); color: var(--muted); font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.65rem; }
 
-.portfolio-dashboard { overflow: hidden; margin-inline: -35px; border: 1px solid var(--line); border-radius: 13px 13px 0 0; background: rgb(7 15 14 / 62%); }
-.dashboard-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 0.78rem; font-weight: 700; text-align: center; }
-.dashboard-tabs span { padding: 15px 8px; }
-.dashboard-tabs .active { border-bottom: 3px solid var(--lime); color: var(--ink); background: rgb(208 251 117 / 8%); }
-.dashboard-body { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; padding: 31px; }
+.portfolio-timeline { position: relative; isolation: isolate; overflow: hidden; margin-inline: -35px; padding: clamp(44px, 6vw, 76px) clamp(28px, 6.5vw, 86px); border-top: 1px solid rgb(111 133 188 / 35%); border-bottom: 1px solid rgb(111 133 188 / 28%); background: #080d18; }
+.portfolio-timeline::before { position: absolute; z-index: -2; inset: -38% -22%; background: radial-gradient(ellipse at 8% 18%, rgb(32 65 184 / 62%) 0%, transparent 36%), radial-gradient(ellipse at 86% 66%, rgb(35 46 140 / 42%) 0%, transparent 33%), linear-gradient(138deg, transparent 37%, rgb(44 81 211 / 42%) 47%, transparent 56%); content: ""; filter: blur(10px); transform: rotate(-3deg) scale(1.08); }
+.portfolio-timeline::after { position: absolute; z-index: -1; inset: 0; background-image: radial-gradient(rgb(197 216 255 / 50%) 0.7px, transparent 0.9px); background-position: 37px 19px; background-size: 127px 103px; content: ""; opacity: 0.28; pointer-events: none; }
+.timeline-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(46px, 10vw, 150px); }
 .timeline-section { padding: 0; }
-.timeline-section h2 { margin-bottom: 28px; font-size: 1.45rem; font-weight: 850; letter-spacing: -0.065em; }
-.timeline { position: relative; display: grid; gap: 27px; padding: 0 0 0 20px; margin: 0; list-style: none; }
-.timeline::before { position: absolute; inset: 3px auto 4px 0; width: 1px; background: var(--line); content: ""; }
-.timeline li { position: relative; display: grid; grid-template-columns: 40px 1fr; gap: 11px; }
-.timeline li::before { position: absolute; top: 4px; left: -24px; width: 9px; height: 9px; border: 2px solid var(--night-deep); border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 1px var(--lime); content: ""; }
-.timeline-section:nth-child(2) .timeline li::before { background: var(--violet); box-shadow: 0 0 0 1px var(--violet); }
-.timeline-period { margin-bottom: 0; color: var(--muted); font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.64rem; line-height: 1.45; }
-.timeline h3 { margin-bottom: 3px; font-size: 0.9rem; font-weight: 800; line-height: 1.35; letter-spacing: -0.025em; }
-.timeline-organisation { margin-bottom: 6px; color: var(--sky); font-size: 0.74rem; font-weight: 700; }
-.timeline li div > p:last-child { margin-bottom: 0; color: var(--muted); font-size: 0.76rem; line-height: 1.5; }
+.timeline-section h2 { margin-bottom: clamp(36px, 4vw, 58px); color: #f6f8ff; font-size: clamp(1.65rem, 2.6vw, 2.25rem); font-weight: 700; letter-spacing: -0.045em; }
+.timeline { display: grid; gap: clamp(31px, 3.5vw, 50px); padding: 0; margin: 0; list-style: none; }
+.timeline li { position: relative; min-height: 80px; padding-left: 34px; }
+.timeline li::before { position: absolute; top: 0.16rem; bottom: 0.08rem; left: 0; width: 1px; background: linear-gradient(180deg, rgb(163 190 255 / 48%), rgb(163 190 255 / 12%)); content: ""; }
+.timeline-section:nth-child(2) .timeline li::before { background: linear-gradient(180deg, rgb(188 172 255 / 52%), rgb(188 172 255 / 13%)); }
+.timeline h3 { margin-bottom: 7px; color: #f7f8ff; font-size: clamp(1rem, 1.5vw, 1.22rem); font-weight: 700; line-height: 1.32; letter-spacing: -0.035em; }
+.timeline-organisation { margin-bottom: 8px; color: rgb(215 224 255 / 68%); font-size: 0.93rem; line-height: 1.45; }
+.timeline-detail { max-width: 34rem; margin-bottom: 8px; color: rgb(215 224 255 / 58%); font-size: 0.8rem; line-height: 1.55; }
+.timeline-period { margin-bottom: 0; color: rgb(215 224 255 / 50%); font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.68rem; letter-spacing: 0.08em; line-height: 1.45; }
 .window-footer { display: flex; justify-content: space-between; gap: 20px; padding: 18px 23px; border-top: 1px solid var(--line-soft); color: var(--muted); font-size: 0.7rem; }
 .window-footer p { margin: 0; }
 .window-footer a { color: var(--lime); }
@@ -319,10 +317,10 @@ h1, h2, h3, p { margin-top: 0; }
   .window-content { padding: 34px 22px 0; }
   .hero { min-height: auto; padding-bottom: 45px; }
   .hero h1 { font-size: clamp(3.55rem, 17.5vw, 5rem); }
-  .portfolio-dashboard { margin-inline: -11px; }
-  .dashboard-tabs { font-size: 0.63rem; }
-  .dashboard-tabs span { padding-inline: 4px; }
-  .dashboard-body { grid-template-columns: 1fr; padding: 26px 20px; }
+  .portfolio-timeline { margin-inline: -11px; padding: 42px 24px; }
+  .timeline-grid { grid-template-columns: 1fr; gap: 52px; }
+  .timeline-section h2 { margin-bottom: 35px; }
+  .timeline { gap: 32px; }
   .window-footer { display: grid; gap: 8px; }
   .desktop-page { min-height: 500px; }
   .projects-grid { grid-template-columns: 1fr; }

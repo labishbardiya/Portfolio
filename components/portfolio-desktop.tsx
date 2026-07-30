@@ -47,9 +47,8 @@ function HomePanel({ home, onOpen }: { home: HomeContent; onOpen: (page: Desktop
         </aside>
       </section>
 
-      <section className="portfolio-dashboard" aria-label="Experience and awards">
-        <div className="dashboard-tabs"><span className="active">Build log</span><span>Proof of work</span><span>Good things happened</span></div>
-        <div className="dashboard-body"><Timeline title="Experience" items={home.experience} /><Timeline title="Awards" items={home.awards} /></div>
+      <section className="portfolio-timeline" aria-label="Experience and awards">
+        <div className="timeline-grid"><Timeline title="Experience" items={home.experience} /><Timeline title="Awards" items={home.awards} /></div>
       </section>
     </>
   );
