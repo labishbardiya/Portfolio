@@ -7,7 +7,11 @@ create table public.portfolio_admins (
   created_at timestamptz not null default now()
 );
 
-create or replace function public.is_portfolio_admin()
+create schema if not exists private;
+revoke all on schema private from public;
+grant usage on schema private to authenticated;
+
+create or replace function private.is_portfolio_admin()
 returns boolean
 language sql
 stable
@@ -21,8 +25,8 @@ as $$
   );
 $$;
 
-revoke all on function public.is_portfolio_admin() from public;
-grant execute on function public.is_portfolio_admin() to authenticated;
+revoke all on function private.is_portfolio_admin() from public;
+grant execute on function private.is_portfolio_admin() to authenticated;
 
 create table public.portfolio_projects (
   id uuid primary key default gen_random_uuid(),
@@ -109,25 +113,49 @@ create policy "Published projects are public" on public.portfolio_projects
 for select to anon, authenticated using (status = 'published');
 
 create policy "Admins manage projects" on public.portfolio_projects
-for all to authenticated
-using ((select public.is_portfolio_admin()))
-with check ((select public.is_portfolio_admin()));
+for insert to authenticated
+with check ((select private.is_portfolio_admin()));
+
+create policy "Admins update projects" on public.portfolio_projects
+for update to authenticated
+using ((select private.is_portfolio_admin()))
+with check ((select private.is_portfolio_admin()));
+
+create policy "Admins delete projects" on public.portfolio_projects
+for delete to authenticated
+using ((select private.is_portfolio_admin()));
 
 create policy "Published timeline entries are public" on public.portfolio_timeline_entries
 for select to anon, authenticated using (status = 'published');
 
 create policy "Admins manage timeline entries" on public.portfolio_timeline_entries
-for all to authenticated
-using ((select public.is_portfolio_admin()))
-with check ((select public.is_portfolio_admin()));
+for insert to authenticated
+with check ((select private.is_portfolio_admin()));
+
+create policy "Admins update timeline entries" on public.portfolio_timeline_entries
+for update to authenticated
+using ((select private.is_portfolio_admin()))
+with check ((select private.is_portfolio_admin()));
+
+create policy "Admins delete timeline entries" on public.portfolio_timeline_entries
+for delete to authenticated
+using ((select private.is_portfolio_admin()));
 
 create policy "Published settings are public" on public.portfolio_settings
 for select to anon, authenticated using (is_published);
 
 create policy "Admins manage settings" on public.portfolio_settings
-for all to authenticated
-using ((select public.is_portfolio_admin()))
-with check ((select public.is_portfolio_admin()));
+for insert to authenticated
+with check ((select private.is_portfolio_admin()));
+
+create policy "Admins update settings" on public.portfolio_settings
+for update to authenticated
+using ((select private.is_portfolio_admin()))
+with check ((select private.is_portfolio_admin()));
+
+create policy "Admins delete settings" on public.portfolio_settings
+for delete to authenticated
+using ((select private.is_portfolio_admin()));
 
 insert into public.portfolio_projects (name, slug, number, stage, description, tags, links, status, featured, sort_order, published_at)
 values
