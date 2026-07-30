@@ -1,0 +1,67 @@
+/* Studio has a dedicated bundle so editor work cannot inherit stale public-page styles. */
+.studio-shell { min-height: 100vh; padding: 132px max(24px, calc((100vw - 1180px) / 2)) 80px; background: radial-gradient(circle at 8% 8%, rgb(208 251 117 / 13%), transparent 25rem), radial-gradient(circle at 90% 20%, rgb(122 200 255 / 10%), transparent 28rem), var(--night-deep); }
+.studio-login-shell { display: grid; place-items: center; padding: 110px 24px 40px; }
+.studio-login-card, .studio-access-card { width: min(100%, 530px); padding: clamp(28px, 5vw, 52px); border: 1px solid var(--line); border-radius: 16px; background: linear-gradient(150deg, rgb(31 50 45 / 92%), rgb(7 15 14 / 93%)); box-shadow: 14px 16px 0 rgb(0 0 0 / 17%); }
+.studio-login-card h1, .studio-access-card h1, .studio-header h1 { margin-bottom: 14px; font-size: clamp(2.7rem, 6vw, 5rem); font-weight: 850; line-height: 0.88; letter-spacing: -0.085em; }
+.studio-login-card > p:not(.studio-kicker):not(.studio-notice), .studio-access-card > p { color: var(--muted); line-height: 1.6; }
+.studio-kicker { margin-bottom: 11px; color: var(--lime); font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.105em; text-transform: uppercase; }
+.studio-login-form { display: grid; gap: 10px; margin-top: 26px; }
+.studio-login-form label, .studio-project-form label { display: grid; gap: 7px; color: var(--ink); font-size: 0.72rem; font-weight: 800; }
+.studio-login-form input, .studio-project-form input, .studio-project-form textarea, .studio-project-form select { width: 100%; border: 1px solid var(--line); border-radius: 7px; outline: 0; background: rgb(3 10 9 / 67%); color: var(--ink); font: inherit; font-size: 0.86rem; line-height: 1.4; }
+.studio-login-form input, .studio-project-form input, .studio-project-form select { min-height: 41px; padding: 9px 10px; }
+.studio-project-form textarea { min-height: 84px; padding: 10px; resize: vertical; }
+.studio-login-form input:focus, .studio-project-form input:focus, .studio-project-form textarea:focus, .studio-project-form select:focus { border-color: var(--lime); box-shadow: 0 0 0 3px rgb(208 251 117 / 12%); }
+.studio-login-form button, .studio-project-form > button, .studio-actions button { width: max-content; min-height: 41px; margin-top: 6px; padding: 9px 13px; border: 1px solid var(--lime); border-radius: 7px; background: var(--lime); color: var(--night-deep); cursor: pointer; font: inherit; font-size: 0.75rem; font-weight: 900; transition: 150ms ease; }
+.studio-login-form button:hover:not(:disabled), .studio-project-form > button:hover:not(:disabled), .studio-actions button:hover:not(:disabled) { box-shadow: 3px 4px 0 rgb(208 251 117 / 18%); transform: translateY(-1px); }
+.studio-login-form button:disabled, .studio-project-form button:disabled { cursor: wait; opacity: 0.7; }
+.studio-notice, .studio-feedback { margin: 14px 0 0; color: #ffb4ae; font-size: 0.78rem; line-height: 1.45; }
+.studio-feedback.success { color: var(--lime); }
+.studio-user-id { overflow-wrap: anywhere; padding: 11px; border: 1px solid var(--line-soft); border-radius: 7px; background: rgb(4 10 9 / 45%); font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.72rem; }
+.studio-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; padding-bottom: 33px; border-bottom: 1px solid var(--line); }
+.studio-header h1 { max-width: 690px; }
+.studio-header > div > p:not(.studio-kicker) { max-width: 600px; margin-bottom: 0; color: var(--muted); line-height: 1.55; }
+.studio-header-links { display: grid; justify-items: end; gap: 9px; color: var(--muted); font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.72rem; text-align: right; }
+.studio-header-links a { color: var(--lime); font-family: Arial, Helvetica, sans-serif; font-weight: 800; }
+.studio-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 25px 0 48px; border: 1px solid var(--line); border-radius: 10px; background: rgb(15 29 26 / 58%); }
+.studio-summary p { padding: 15px 18px; margin: 0; border-right: 1px solid var(--line); color: var(--muted); font-size: 0.76rem; }
+.studio-summary p:last-child { border-right: 0; }
+.studio-summary strong { display: block; margin-bottom: 2px; color: var(--ink); font-family: "SFMono-Regular", Consolas, monospace; font-size: 1.12rem; }
+.studio-section-title { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 22px; }
+.studio-section-title .studio-kicker { margin-bottom: 6px; }
+.studio-section-title h2 { margin: 0; font-size: 2rem; letter-spacing: -0.06em; }
+.studio-new-project { position: relative; }
+.studio-new-project summary { padding: 10px 12px; border: 1px solid var(--lime); border-radius: 7px; color: var(--lime); cursor: pointer; font-size: 0.75rem; font-weight: 900; list-style: none; }
+.studio-new-project summary::-webkit-details-marker { display: none; }
+.studio-new-project[open] { z-index: 2; width: min(100%, 760px); }
+.studio-new-project[open] summary { border-radius: 7px 7px 0 0; background: rgb(208 251 117 / 11%); }
+.studio-new-project .studio-project-form { padding: 18px; border: 1px solid var(--lime); border-top: 0; border-radius: 0 0 10px 10px; background: #142320; box-shadow: 10px 12px 30px rgb(0 0 0 / 38%); }
+.studio-project-list { display: grid; gap: 18px; }
+.studio-project-card { padding: clamp(18px, 3vw, 29px); border: 1px solid var(--line); border-radius: 12px; background: linear-gradient(145deg, rgb(28 46 42 / 90%), rgb(7 15 14 / 80%)); }
+.studio-project-card > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 21px; }
+.studio-project-card header p { margin-bottom: 6px; color: var(--lime); font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; }
+.studio-project-card header h2 { margin-bottom: 0; font-size: clamp(1.45rem, 3vw, 2rem); letter-spacing: -0.06em; }
+.studio-project-card time { color: var(--muted); font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.67rem; white-space: nowrap; }
+.studio-project-form { display: grid; gap: 15px; }
+.studio-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; }
+.studio-field-wide { grid-column: 1 / -1; }
+.studio-project-form label span { color: var(--muted); font-size: 0.64rem; font-weight: 600; }
+.studio-checkbox { display: flex !important; grid-column: 1 / -1; align-items: center; gap: 9px !important; color: var(--muted) !important; }
+.studio-checkbox input { width: 16px; min-height: 16px; accent-color: var(--lime); }
+.studio-actions { display: flex; align-items: center; gap: 14px; }
+.studio-actions .studio-feedback { margin: 0; }
+.studio-archive-form { display: flex; align-items: center; gap: 12px; padding-top: 17px; margin-top: 19px; border-top: 1px solid var(--line-soft); }
+.studio-archive-form button { padding: 7px 0; border: 0; background: transparent; color: #ffb4ae; cursor: pointer; font: inherit; font-size: 0.7rem; font-weight: 800; text-decoration: underline; text-underline-offset: 0.18em; }
+.studio-archive-form .studio-feedback { margin: 0; }
+
+@media (max-width: 680px) {
+  .studio-shell { padding: 108px 16px 44px; }
+  .studio-header { display: grid; }
+  .studio-header-links { justify-items: start; text-align: left; }
+  .studio-summary { margin-bottom: 33px; }
+  .studio-summary p { padding: 12px 9px; font-size: 0.66rem; }
+  .studio-section-title { align-items: flex-start; }
+  .studio-fields { grid-template-columns: 1fr; }
+  .studio-field-wide { grid-column: auto; }
+  .studio-project-card > header { display: grid; gap: 9px; }
+  .studio-archive-form { display: grid; }
+}
