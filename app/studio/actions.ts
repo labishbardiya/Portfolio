@@ -2,9 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import type { StudioActionState, StudioProjectLink } from "@/lib/studio";
+import type { StudioActionState, StudioProjectLink, StudioSocialLink } from "@/lib/studio";
 
 const statusValues = new Set(["draft", "published", "archived"]);
+const timelineCategories = new Set(["experience", "award"]);
+const socialLabels = new Set<StudioSocialLink["label"]>(["LinkedIn", "X", "GitHub", "YouTube", "Instagram"]);
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 function text(formData: FormData, key: string, maximum: number, minimum = 0) {
@@ -41,6 +43,33 @@ function parseLinks(value: string): StudioProjectLink[] {
 
     return { label: rawLabel, href: rawHref };
   });
+}
+
+function parseLines(value: string, key: string, minimum: number, maximum: number, lineMaximum: number) {
+  const lines = value.split("\n").map((line) => line.trim()).filter(Boolean);
+  if (lines.length < minimum || lines.length > maximum || lines.some((line) => line.length > lineMaximum)) {
+    throw new Error(`${key} needs ${minimum}–${maximum} short lines.`);
+  }
+  return lines;
+}
+
+function parseSocialLinks(value: string): StudioSocialLink[] {
+  const lines = parseLines(value, "social links", 1, 5, 120);
+  const links = lines.map((line) => {
+    const [rawLabel, rawHref, ...extra] = line.split("|").map((part) => part.trim());
+    if (!rawLabel || !rawHref || extra.length || !socialLabels.has(rawLabel as StudioSocialLink["label"])) {
+      throw new Error("Social links use LinkedIn, X, GitHub, YouTube, or Instagram: Label | https://…");
+    }
+    try {
+      const url = new URL(rawHref);
+      if (url.protocol !== "https:") throw new Error();
+    } catch {
+      throw new Error("Every social link needs a valid https URL.");
+    }
+    return { label: rawLabel as StudioSocialLink["label"], href: rawHref };
+  });
+  if (new Set(links.map((link) => link.label)).size !== links.length) throw new Error("Use each social network once.");
+  return links;
 }
 
 function readProject(formData: FormData) {
@@ -108,6 +137,22 @@ function refreshPortfolio() {
   revalidatePath("/studio");
 }
 
+function readTimelineEntry(formData: FormData) {
+  const category = text(formData, "category", 12, 1);
+  if (!timelineCategories.has(category)) throw new Error("Choose experience or award.");
+  const status = text(formData, "status", 12, 1);
+  if (!statusValues.has(status)) throw new Error("Choose draft, published, or archived.");
+  return {
+    category,
+    period: text(formData, "period", 40, 1),
+    title: text(formData, "title", 120, 1),
+    organisation: text(formData, "organisation", 180, 1),
+    description: text(formData, "description", 500, 1),
+    status,
+    sort_order: integer(formData, "sort_order", -10000, 10000),
+  };
+}
+
 export async function createProject(_: StudioActionState, formData: FormData): Promise<StudioActionState> {
   try {
     const supabase = await requireStudioAdmin();
@@ -148,5 +193,64 @@ export async function archiveProject(_: StudioActionState, formData: FormData): 
     return { ok: true, message: "Archived. You can restore it by editing its status later." };
   } catch (error) {
     return { ok: false, message: error instanceof Error ? error.message : "Could not archive the project." };
+  }
+}
+
+export async function saveHomeSettings(_: StudioActionState, formData: FormData): Promise<StudioActionState> {
+  try {
+    const supabase = await requireStudioAdmin();
+    const typewriter_lines = parseLines(text(formData, "typewriter_lines", 1200), "typewriter lines", 1, 10, 120);
+    const focusItems = parseLines(text(formData, "current_focus", 600), "current focus", 1, 3, 140);
+    const current_focus = { items: focusItems, caption: text(formData, "focus_caption", 120, 1) };
+    const social_links = parseSocialLinks(text(formData, "social_links", 1200));
+    const { error } = await supabase.from("portfolio_settings").update({
+      typewriter_lines,
+      current_focus,
+      social_links,
+      is_published: formData.get("is_published") === "on",
+    }).eq("id", true);
+    if (error) throw new Error(error.message);
+    refreshPortfolio();
+    return { ok: true, message: "Homepage settings saved." };
+  } catch (error) {
+    return { ok: false, message: error instanceof Error ? error.message : "Could not save homepage settings." };
+  }
+}
+
+export async function createTimelineEntry(_: StudioActionState, formData: FormData): Promise<StudioActionState> {
+  try {
+    const supabase = await requireStudioAdmin();
+    const { error } = await supabase.from("portfolio_timeline_entries").insert(readTimelineEntry(formData));
+    if (error) throw new Error(error.message);
+    refreshPortfolio();
+    return { ok: true, message: "Timeline entry created." };
+  } catch (error) {
+    return { ok: false, message: error instanceof Error ? error.message : "Could not create the timeline entry." };
+  }
+}
+
+export async function saveTimelineEntry(_: StudioActionState, formData: FormData): Promise<StudioActionState> {
+  try {
+    const id = text(formData, "id", 36, 36);
+    const supabase = await requireStudioAdmin();
+    const { error } = await supabase.from("portfolio_timeline_entries").update(readTimelineEntry(formData)).eq("id", id);
+    if (error) throw new Error(error.message);
+    refreshPortfolio();
+    return { ok: true, message: "Timeline entry saved." };
+  } catch (error) {
+    return { ok: false, message: error instanceof Error ? error.message : "Could not save the timeline entry." };
+  }
+}
+
+export async function archiveTimelineEntry(_: StudioActionState, formData: FormData): Promise<StudioActionState> {
+  try {
+    const id = text(formData, "id", 36, 36);
+    const supabase = await requireStudioAdmin();
+    const { error } = await supabase.from("portfolio_timeline_entries").update({ status: "archived" }).eq("id", id);
+    if (error) throw new Error(error.message);
+    refreshPortfolio();
+    return { ok: true, message: "Timeline entry archived." };
+  } catch (error) {
+    return { ok: false, message: error instanceof Error ? error.message : "Could not archive the timeline entry." };
   }
 }

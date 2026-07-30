@@ -6,22 +6,23 @@ import {
   faXTwitter,
   faYoutube,
 } from "@fortawesome/free-brands-svg-icons";
+import type { SocialLink } from "@/data/home";
 
-const socialLinks = [
-  { label: "LinkedIn", href: "https://linkedin.com/in/labishbardiya", icon: faLinkedinIn },
-  { label: "X", href: "https://x.com/labishbardiya", icon: faXTwitter },
-  { label: "GitHub", href: "https://github.com/labishbardiya", icon: faGithub },
-  { label: "YouTube", href: "https://youtube.com/@Labishbardiya", icon: faYoutube },
-  { label: "Instagram", href: "https://www.instagram.com/labish.bardiya/", icon: faInstagram },
-];
+const icons = {
+  LinkedIn: faLinkedinIn,
+  X: faXTwitter,
+  GitHub: faGithub,
+  YouTube: faYoutube,
+  Instagram: faInstagram,
+};
 
-export function SocialLinks() {
+export function SocialLinks({ links }: { links: SocialLink[] }) {
   return (
     <ul className="social-links" aria-label="Labish's social profiles">
-      {socialLinks.map(({ label, href, icon }) => (
+      {links.map(({ label, href }) => (
         <li key={label}>
           <a href={href} target="_blank" rel="noreferrer" aria-label={label} title={label}>
-            <FontAwesomeIcon icon={icon} />
+            <FontAwesomeIcon icon={icons[label]} />
           </a>
         </li>
       ))}

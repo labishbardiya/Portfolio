@@ -1,11 +1,6 @@
-type TimelineItem = {
-  period: string;
-  title: string;
-  organisation: string;
-  description: string;
-};
+import type { TimelineItem } from "@/data/home";
 
-export function Timeline({ title, items }: { title: string; items: readonly TimelineItem[] }) {
+export function Timeline({ title, items }: { title: string; items: TimelineItem[] }) {
   return (
     <section className="timeline-section" aria-labelledby={`${title.toLowerCase()}-heading`}>
       <h2 id={`${title.toLowerCase()}-heading`}>{title}</h2>

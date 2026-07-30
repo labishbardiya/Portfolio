@@ -11,7 +11,7 @@ import { ContactForm } from "@/components/contact-form";
 import { SocialLinks } from "@/components/social-links";
 import { Timeline } from "@/components/timeline";
 import { Typewriter } from "@/components/typewriter";
-import { awards, experience, typewriterPhrases } from "@/data/home";
+import type { HomeContent } from "@/data/home";
 import type { Project } from "@/data/projects";
 
 type WindowState = "open" | "minimized" | "closed";
@@ -25,38 +25,36 @@ const pageTitles: Record<DesktopPage, string> = {
   contact: "contact / labishbardiya.dev",
 };
 
-function HomePanel({ onOpen }: { onOpen: (page: DesktopPage) => void }) {
+function HomePanel({ home, onOpen }: { home: HomeContent; onOpen: (page: DesktopPage) => void }) {
   return (
     <>
       <section className="hero">
         <div className="hero-copy">
           <p className="hero-kicker"><span /> Builder mode: on</p>
-          <SocialLinks />
+          <SocialLinks links={home.socialLinks} />
           <h1>Hi, I&apos;m Labish.</h1>
-          <Typewriter phrases={typewriterPhrases} />
+          <Typewriter phrases={home.typewriterPhrases} />
           <LiquidMetalButton label="Open projects" onClick={() => onOpen("projects")} />
         </div>
         <aside className="status-card" aria-label="Current focus">
           <div className="status-card-title"><span>now.exe</span><span>● live</span></div>
           <div className="status-grid">
-            <p><b>01</b><span>Building products that leave the lab.</span></p>
-            <p><b>02</b><span>Researching agents that work together.</span></p>
-            <p><b>03</b><span>Learning loudly, making carefully.</span></p>
+            {home.currentFocus.items.slice(0, 3).map((item, index) => <p key={item}><b>{String(index + 1).padStart(2, "0")}</b><span>{item}</span></p>)}
           </div>
-          <p className="status-caption">open tabs / code · care · curiosity</p>
+          <p className="status-caption">{home.currentFocus.caption}</p>
         </aside>
       </section>
 
       <section className="portfolio-dashboard" aria-label="Experience and awards">
         <div className="dashboard-tabs"><span className="active">Build log</span><span>Proof of work</span><span>Good things happened</span></div>
-        <div className="dashboard-body"><Timeline title="Experience" items={experience} /><Timeline title="Awards" items={awards} /></div>
+        <div className="dashboard-body"><Timeline title="Experience" items={home.experience} /><Timeline title="Awards" items={home.awards} /></div>
       </section>
     </>
   );
 }
 
-function PagePanel({ page, onOpen, projects }: { page: DesktopPage; onOpen: (page: DesktopPage) => void; projects: Project[] }) {
-  if (page === "home") return <HomePanel onOpen={onOpen} />;
+function PagePanel({ page, onOpen, projects, home }: { page: DesktopPage; onOpen: (page: DesktopPage) => void; projects: Project[]; home: HomeContent }) {
+  if (page === "home") return <HomePanel home={home} onOpen={onOpen} />;
   if (page === "projects") return <section className="desktop-page"><p className="eyebrow">Projects</p><h1>Things I&apos;ve been making.</h1><p>Some of my cool projects. You can see me talk about them on <a href="https://x.com/labishbardiya" target="_blank" rel="noreferrer">X</a>.</p><ProjectsGrid projects={projects} /></section>;
   if (page === "writing") return <section className="desktop-page"><p className="eyebrow">Writing</p><h1>Notes from the workbench.</h1><p>Essays, ideas, and things I&apos;m still figuring out. The publishing workspace will live here in the next content pass.</p></section>;
   if (page === "about") return <section className="desktop-about"><div><p className="eyebrow">About</p><h1>The person behind the tabs.</h1><p>I&apos;m Labish — a computer science student, founder, and curious builder from Jaipur. Most of my attention lives somewhere between AI research and making technology useful enough to escape a slide deck.</p><p>Right now, I&apos;m building health-tech ideas, thinking about agents that work together, and learning what it takes to turn an ambitious prototype into something people can trust.</p><LiquidMetalButton label="Open contact" onClick={() => onOpen("contact")} /></div><Image src="/profile0.png" alt="Labish Bardiya" width={1600} height={1600} /></section>;
@@ -64,7 +62,7 @@ function PagePanel({ page, onOpen, projects }: { page: DesktopPage; onOpen: (pag
   return <section className="desktop-page contact-page"><p className="eyebrow">Contact</p><h1>Let&apos;s make something useful.</h1><p>Have an idea, a useful problem, or a project that needs a curious builder? Say hi.</p><ContactForm /></section>;
 }
 
-export function PortfolioDesktop({ projects }: { projects: Project[] }) {
+export function PortfolioDesktop({ projects, home }: { projects: Project[]; home: HomeContent }) {
   const [page, setPage] = useState<DesktopPage>("home");
   const [windowState, setWindowState] = useState<WindowState>("open");
   const [maximized, setMaximized] = useState(false);
@@ -99,7 +97,7 @@ export function PortfolioDesktop({ projects }: { projects: Project[] }) {
             </div>
           </div>
           <div className="window-scroll">
-            <div className="window-content"><PagePanel page={page} onOpen={openPage} projects={projects} /></div>
+            <div className="window-content"><PagePanel page={page} onOpen={openPage} projects={projects} home={home} /></div>
             <footer className="window-footer"><p>Want to collaborate? Check out my <a href="https://github.com/labishbardiya" target="_blank" rel="noreferrer">GitHub</a>.</p><p>Jaipur, India · 2026</p></footer>
           </div>
         </section>

@@ -1,3 +1,23 @@
+export type TimelineItem = {
+  period: string;
+  title: string;
+  organisation: string;
+  description: string;
+};
+
+export type SocialLink = {
+  label: "LinkedIn" | "X" | "GitHub" | "YouTube" | "Instagram";
+  href: string;
+};
+
+export type HomeContent = {
+  typewriterPhrases: string[];
+  experience: TimelineItem[];
+  awards: TimelineItem[];
+  socialLinks: SocialLink[];
+  currentFocus: { items: string[]; caption: string };
+};
+
 export const typewriterPhrases = [
   "Curious by default, building by instinct.",
   "Thinking in systems, building with heart.",
@@ -6,9 +26,9 @@ export const typewriterPhrases = [
   "Chasing ideas worth making real.",
   "Somewhere between code, care, and curiosity.",
   "Learning in public, making things real.",
-] as const;
+] satisfies string[];
 
-export const experience = [
+export const experience: TimelineItem[] = [
   {
     period: "Now",
     title: "Founder & CEO",
@@ -33,9 +53,9 @@ export const experience = [
     organisation: "HackJKLU v4.0",
     description: "Led a 10-person team building the event’s digital experience.",
   },
-] as const;
+];
 
-export const awards = [
+export const awards: TimelineItem[] = [
   {
     period: "2026",
     title: "1st Place",
@@ -60,4 +80,27 @@ export const awards = [
     organisation: "Cohort 5",
     description: "Selected from more than 3,000 applicants.",
   },
-] as const;
+];
+
+export const socialLinks: SocialLink[] = [
+  { label: "LinkedIn", href: "https://linkedin.com/in/labishbardiya" },
+  { label: "X", href: "https://x.com/labishbardiya" },
+  { label: "GitHub", href: "https://github.com/labishbardiya" },
+  { label: "YouTube", href: "https://youtube.com/@Labishbardiya" },
+  { label: "Instagram", href: "https://www.instagram.com/labish.bardiya/" },
+];
+
+export const defaultHomeContent: HomeContent = {
+  typewriterPhrases,
+  experience,
+  awards,
+  socialLinks,
+  currentFocus: {
+    items: [
+      "Building products that leave the lab.",
+      "Researching agents that work together.",
+      "Learning loudly, making carefully.",
+    ],
+    caption: "open tabs / code · care · curiosity",
+  },
+};
