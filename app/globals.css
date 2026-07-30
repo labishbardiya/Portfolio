@@ -246,6 +246,19 @@ h1, h2, h3, p { margin-top: 0; }
 .resume-actions a:hover { border-color: var(--lime); background: rgb(208 251 117 / 11%); color: var(--lime); }
 .resume-frame { display: block; width: 100%; height: 780px; border: 1px solid var(--line); border-radius: 0 0 12px 12px; background: #f8f8f6; }
 .resume-page .resume-frame { height: 700px; }
+.contact-form { max-width: 700px; margin-top: 34px; }
+.contact-form label { display: grid; gap: 8px; color: var(--ink); font-size: 0.73rem; font-weight: 800; }
+.contact-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.contact-form input, .contact-form textarea { width: 100%; padding: 11px 12px; border: 1px solid var(--line); border-radius: 7px; outline: 0; background: rgb(7 15 14 / 72%); color: var(--ink); font: inherit; font-size: 0.9rem; line-height: 1.4; resize: vertical; transition: 160ms ease; }
+.contact-form input:focus, .contact-form textarea:focus { border-color: var(--lime); box-shadow: 0 0 0 3px rgb(208 251 117 / 11%); }
+.contact-honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.contact-submit-row { display: flex; align-items: center; gap: 15px; margin-top: 16px; }
+.contact-submit-row button { display: inline-flex; align-items: center; gap: 7px; padding: 11px 14px; border: 1px solid var(--lime); border-radius: 7px; background: var(--lime); color: var(--night-deep); cursor: pointer; font: inherit; font-size: 0.76rem; font-weight: 900; transition: 160ms ease; }
+.contact-submit-row button:hover:not(:disabled) { box-shadow: 3px 4px 0 rgb(208 251 117 / 20%); transform: translateY(-1px); }
+.contact-submit-row button:disabled { cursor: wait; opacity: 0.72; }
+.contact-message { margin: 0; font-size: 0.74rem; line-height: 1.35; }
+.contact-message-sent { color: var(--lime); }
+.contact-message-error { color: #ffb4ae; }
 .about-page { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(330px, 0.74fr); align-items: center; gap: clamp(48px, 10vw, 135px); min-height: 100vh; padding-block: 128px 72px; }
 .about-copy > p:not(.eyebrow) { max-width: 580px; color: var(--muted); font-size: 1.04rem; line-height: 1.65; }
 .about-copy .interactive-hover-button { margin-top: 14px; }
@@ -284,6 +297,8 @@ h1, h2, h3, p { margin-top: 0; }
   .projects-grid { grid-template-columns: 1fr; }
   .resume-actions { display: grid; }
   .resume-frame, .resume-page .resume-frame { height: 620px; }
+  .contact-form-grid { grid-template-columns: 1fr; }
+  .contact-submit-row { align-items: flex-start; flex-direction: column; }
   .desktop-page h1, .desktop-about h1 { font-size: clamp(2.8rem, 14vw, 4.35rem); }
   .minimized-window { right: 14px; bottom: 14px; }
   .minimized-window .liquid-metal-button { min-width: 0; max-width: calc(100vw - 28px); }
