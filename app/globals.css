@@ -188,14 +188,6 @@ h1, h2, h3, p { margin-top: 0; }
 .markdown-article pre { overflow-x: auto; padding: 18px; border: 1px solid var(--line); border-radius: 9px; background: #091312; color: var(--ink); font-size: 0.84rem; }
 .markdown-article :not(pre) > code { padding: 0.14em 0.35em; border: 1px solid var(--line-soft); border-radius: 4px; background: rgb(7 15 14 / 65%); font-size: 0.86em; }
 .markdown-article table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }.markdown-article th, .markdown-article td { padding: 10px; border: 1px solid var(--line); text-align: left; }.markdown-article th { color: var(--ink); }.markdown-article td { color: var(--muted); }
-.resume-viewer { max-width: 960px; margin-top: 34px; }
-.resume-actions { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 15px; border: 1px solid var(--line); border-bottom: 0; border-radius: 12px 12px 0 0; background: rgb(7 15 14 / 62%); }
-.resume-actions p { margin: 0; color: var(--muted); font-size: 0.77rem; line-height: 1.4; }
-.resume-actions div { display: flex; flex-wrap: wrap; gap: 8px; }
-.resume-actions a { display: inline-flex; align-items: center; gap: 6px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); font-size: 0.69rem; font-weight: 800; text-decoration: none; transition: 160ms ease; }
-.resume-actions a:hover { border-color: var(--lime); background: rgb(208 251 117 / 11%); color: var(--lime); }
-.resume-frame { display: block; width: 100%; height: 780px; border: 1px solid var(--line); border-radius: 0 0 12px 12px; background: #f8f8f6; }
-.resume-page .resume-frame { height: 700px; }
 .contact-form { max-width: 700px; margin-top: 34px; }
 .contact-form label { display: grid; gap: 8px; color: var(--ink); font-size: 0.73rem; font-weight: 800; }
 .contact-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
@@ -233,8 +225,6 @@ h1, h2, h3, p { margin-top: 0; }
   .timeline { gap: 32px; }
   .site-footer { display: grid; gap: 8px; }
   .projects-grid { grid-template-columns: 1fr; }
-  .resume-actions { display: grid; }
-  .resume-frame, .resume-page .resume-frame { height: 620px; }
   .contact-form-grid { grid-template-columns: 1fr; }
   .contact-submit-row { align-items: flex-start; flex-direction: column; }
   .about-page { grid-template-columns: 1fr; padding-block: 120px 52px; }
