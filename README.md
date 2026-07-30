@@ -18,10 +18,13 @@ npm run build
 
 ## Updating the site
 
-The content that will change most often lives in deliberately small, focused files:
+Published projects are served from Supabase when the environment variables below
+are configured. Local data remains as a safe fallback during development.
+
+For the presentational parts that are still file-managed, use these focused files:
 
 - `data/home.ts` — typewriter phrases, experience, and awards.
-- `app/projects/page.tsx` — project content and links.
+- `data/projects.ts` — local project fallback content and links.
 - `app/writing/page.tsx` — writing archive entry point.
 - `app/about/page.tsx` — personal introduction and currently section.
 - `app/resume/page.tsx` — résumé display and download.
@@ -29,12 +32,46 @@ The content that will change most often lives in deliberately small, focused fil
 
 Shared interface pieces live in `components/`, while `app/globals.css` owns the visual system. Keep the design minimal: one clear idea per section, generous whitespace, and no decoration that does not help the content.
 
+## Portfolio Studio
+
+`/studio` is a private content dashboard. It uses Supabase magic-link auth and
+database-enforced Row Level Security; a signed-in account must also exist in
+`public.portfolio_admins` before it can view drafts or change a project.
+
+1. Add the production callback URL (`https://labishbardiya.com/auth/callback`)
+   and the local callback URL (`http://localhost:3000/auth/callback`) under
+   **Supabase → Authentication → URL Configuration**.
+2. Open `/studio`, request a magic link, and complete sign-in.
+3. Add that account's Auth user ID to `portfolio_admins` through the protected
+   Supabase admin workflow. The dashboard will show the exact ID while access
+   is pending.
+
+Required local configuration (keep this file out of Git):
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
+
+SMTP_HOST=smtp.resend.com
+SMTP_PORT=465
+SMTP_USER=resend
+SMTP_PASSWORD=...
+CONTACT_FROM="Labish Bardiya <hello@labishbardiya.com>"
+CONTACT_TO=...
+```
+
+The public `NEXT_PUBLIC_` values are intentionally safe for browser use because
+the database policies enforce which rows each visitor can read or edit. SMTP
+credentials must remain server-only.
+
 ## Project structure
 
 ```text
 app/          Routes, page layouts, and global styling
 components/   Reusable interactive and display components
 data/         Editable structured site content
+lib/supabase/ Server and browser clients for cookie-based Studio auth
+supabase/     Auditable database migrations and access policies
 ```
 
 ## Technology

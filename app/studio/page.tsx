@@ -1,0 +1,54 @@
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import type { StudioProject } from "@/lib/studio";
+import { NewProjectForm, ProjectEditor } from "./project-editor";
+
+export const dynamic = "force-dynamic";
+
+function AccessPending({ userId, email }: { userId: string; email: string }) {
+  return (
+    <main className="studio-shell">
+      <section className="studio-access-card">
+        <p className="studio-kicker">Studio / access checkpoint</p>
+        <h1>You&apos;re signed in.</h1>
+        <p><strong>{email}</strong> is verified, but it has not yet been approved to edit the portfolio.</p>
+        <p className="studio-user-id">Secure account ID: <code>{userId}</code></p>
+        <p>Send me a screenshot of this page or say “Studio login complete” and I&apos;ll add this account to the admin list. Until then, the database will refuse all edits.</p>
+      </section>
+    </main>
+  );
+}
+
+export default async function StudioPage() {
+  const supabase = await createClient();
+  const { data: claimsData } = await supabase.auth.getClaims();
+  const userId = claimsData?.claims?.sub;
+  const email = claimsData?.claims?.email;
+
+  if (typeof userId !== "string" || typeof email !== "string") redirect("/studio/login");
+
+  const { data: admin } = await supabase
+    .from("portfolio_admins")
+    .select("user_id")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (!admin) return <AccessPending userId={userId} email={email} />;
+
+  const { data: projects, error } = await supabase
+    .from("portfolio_projects")
+    .select("id, name, slug, number, stage, description, tags, links, cover_url, status, featured, sort_order, updated_at")
+    .order("sort_order", { ascending: true });
+
+  return (
+    <main className="studio-shell">
+      <header className="studio-header">
+        <div><p className="studio-kicker">Labish Bardiya / Studio</p><h1>Portfolio control room.</h1><p>Projects are live data. Save a draft, publish when it is ready, archive instead of deleting.</p></div>
+        <div className="studio-header-links"><span>{email}</span><Link href="/">View portfolio ↗</Link></div>
+      </header>
+      <section className="studio-summary"><p><strong>{projects?.filter((project) => project.status === "published").length ?? 0}</strong> published</p><p><strong>{projects?.filter((project) => project.status === "draft").length ?? 0}</strong> drafts</p><p><strong>{projects?.filter((project) => project.status === "archived").length ?? 0}</strong> archived</p></section>
+      <section className="studio-projects" aria-labelledby="projects-heading"><div className="studio-section-title"><div><p className="studio-kicker">Content</p><h2 id="projects-heading">Projects</h2></div><NewProjectForm /></div>{error ? <p className="studio-feedback">Could not load projects. Refresh and try again.</p> : <div className="studio-project-list">{(projects as StudioProject[] | null)?.map((project) => <ProjectEditor key={project.id} project={project} />)}</div>}</section>
+    </main>
+  );
+}
