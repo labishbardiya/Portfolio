@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import { Lato } from "next/font/google";
 import { SiteChrome } from "@/components/site-chrome";
 import "./globals.css";
 
-// A variable Google font with the same compact, contemporary grotesk character
-// as Cabinet Grotesk. Next serves it from this site at build time.
-const manrope = Manrope({
+// Lato is self-hosted by Next at build time, so the portfolio does not make a
+// runtime request to Google when a visitor opens it.
+const lato = Lato({
   subsets: ["latin"],
-  weight: "variable",
-  variable: "--font-manrope",
+  weight: ["400", "700", "900"],
+  variable: "--font-lato",
   display: "swap",
   fallback: ["Arial", "Helvetica", "sans-serif"],
 });
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={manrope.variable}>
+      <body className={lato.variable}>
         <SiteChrome />
         {children}
       </body>

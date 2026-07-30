@@ -29,7 +29,7 @@ function ProjectFields({ project }: { project?: StudioProject }) {
       </label>
       <label className="studio-field-wide">Description<textarea name="description" defaultValue={project?.description} required maxLength={500} rows={3} /></label>
       <label className="studio-field-wide">Tags <span>comma separated</span><input name="tags" defaultValue={project?.tags.join(", ")} maxLength={300} placeholder="Healthtech, ML, Wearables" /></label>
-      <label className="studio-field-wide">Links <span>one per line: Label | URL</span><textarea name="links" defaultValue={links} maxLength={4000} rows={3} placeholder={"Code | https://github.com/…\nLive | https://example.com"} /></label>
+      <label className="studio-field-wide">Links <span>one per line: Code, Live, Demo, or Document | URL</span><textarea name="links" defaultValue={links} maxLength={4000} rows={3} placeholder={"Code | https://github.com/…\nDemo | https://youtube.com/…"} /></label>
       <label className="studio-field-wide">Cover image URL <span>optional</span><input name="cover_url" type="url" defaultValue={project?.cover_url ?? ""} maxLength={1000} /></label>
       <label className="studio-checkbox"><input name="featured" type="checkbox" defaultChecked={project?.featured ?? false} /> Featured project</label>
     </div>

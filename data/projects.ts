@@ -1,5 +1,5 @@
 export type ProjectLink = {
-  label: "Code" | "Live";
+  label: string;
   href: string;
 };
 
@@ -10,6 +10,7 @@ export type Project = {
   description: string;
   tags: string[];
   links: ProjectLink[];
+  coverUrl?: string | null;
 };
 
 // Kept deliberately short: these are the projects with a public home or source

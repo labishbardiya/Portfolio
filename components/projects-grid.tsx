@@ -1,9 +1,11 @@
-import { ArrowUpRight, Code2, Globe2 } from "lucide-react";
+import { Code2, ExternalLink, FileText, Play, type LucideIcon } from "lucide-react";
 import type { Project } from "@/data/projects";
 
-const linkIcons = {
+const linkIcons: Record<string, LucideIcon> = {
   Code: Code2,
-  Live: Globe2,
+  Live: ExternalLink,
+  Demo: Play,
+  Document: FileText,
 };
 
 export function ProjectsGrid({ projects }: { projects: Project[] }) {
@@ -11,24 +13,34 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
     <div className="projects-grid">
       {projects.map((project) => (
         <article className="project-card" key={project.name}>
-          <div className="project-card-meta">
-            <span>{project.number}</span>
-            <span>{project.stage}</span>
-          </div>
-          <h2>{project.name}</h2>
-          <p>{project.description}</p>
-          <ul className="project-tags" aria-label={`${project.name} disciplines`}>
-            {project.tags.map((tag) => <li key={tag}>{tag}</li>)}
-          </ul>
-          <div className="project-links">
-            {project.links.map((link) => {
-              const Icon = linkIcons[link.label];
-              return (
-                <a href={link.href} key={link.label} target="_blank" rel="noreferrer">
-                  <Icon size={14} aria-hidden="true" /> {link.label} <ArrowUpRight size={13} aria-hidden="true" />
-                </a>
-              );
-            })}
+          {project.coverUrl && (
+            // eslint-disable-next-line @next/next/no-img-element -- Studio accepts dynamic HTTPS image URLs, which cannot be preconfigured as Next image hosts.
+            <img
+              className="project-card-cover"
+              src={project.coverUrl}
+              alt={`${project.name} project preview`}
+            />
+          )}
+          <div className="project-card-content">
+            <div className="project-card-heading">
+              <h2>{project.name}</h2>
+              {project.links.length > 0 && (
+                <div className="project-links" aria-label={`${project.name} links`}>
+                  {project.links.map((link) => {
+                    const Icon = linkIcons[link.label] ?? ExternalLink;
+                    return (
+                      <a href={link.href} key={`${link.label}-${link.href}`} target="_blank" rel="noreferrer" aria-label={`${link.label}: ${project.name}`} title={link.label}>
+                        <Icon aria-hidden="true" />
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+            <p>{project.description}</p>
+            <ul className="project-tags" aria-label={`${project.name} technologies`}>
+              {project.tags.map((tag) => <li key={tag}>{tag}</li>)}
+            </ul>
           </div>
         </article>
       ))}

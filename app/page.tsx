@@ -1,10 +1,8 @@
-import { PortfolioDesktop } from "@/components/portfolio-desktop";
-import { getPublishedHomeContent, getPublishedProjects } from "@/lib/portfolio-data";
-import { getPublishedWritingPosts } from "@/lib/writing-data";
+import { PortfolioHome } from "@/components/portfolio-home";
+import { getPublishedHomeContent } from "@/lib/portfolio-data";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [projects, home, posts] = await Promise.all([getPublishedProjects(), getPublishedHomeContent(), getPublishedWritingPosts()]);
-  return <PortfolioDesktop projects={projects} home={home} posts={posts} />;
+  return <PortfolioHome home={await getPublishedHomeContent()} />;
 }

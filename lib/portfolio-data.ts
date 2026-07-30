@@ -9,6 +9,7 @@ type DatabaseProject = {
   description: string;
   tags: string[];
   links: unknown;
+  cover_url: string | null;
 };
 
 type DatabaseTimelineEntry = TimelineItem & {
@@ -32,7 +33,8 @@ function getPublicClient() {
 function isProjectLink(value: unknown): value is ProjectLink {
   if (!value || typeof value !== "object") return false;
   const link = value as Record<string, unknown>;
-  return (link.label === "Code" || link.label === "Live") && typeof link.href === "string";
+  return typeof link.label === "string" && link.label.trim().length > 0
+    && link.label.length <= 40 && typeof link.href === "string" && /^https?:\/\//.test(link.href);
 }
 
 function toProject(project: DatabaseProject): Project {
@@ -44,6 +46,7 @@ function toProject(project: DatabaseProject): Project {
     description: project.description,
     tags: project.tags,
     links,
+    coverUrl: project.cover_url,
   };
 }
 
@@ -86,7 +89,7 @@ export async function getPublishedProjects(): Promise<Project[]> {
 
   const { data, error } = await supabase
     .from("portfolio_projects")
-    .select("number, name, stage, description, tags, links")
+    .select("number, name, stage, description, tags, links, cover_url")
     .eq("status", "published")
     .order("sort_order", { ascending: true });
 
