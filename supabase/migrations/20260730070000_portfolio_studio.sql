@@ -95,6 +95,13 @@ alter table public.portfolio_projects enable row level security;
 alter table public.portfolio_timeline_entries enable row level security;
 alter table public.portfolio_settings enable row level security;
 
+-- SQL-created tables are not necessarily exposed to the Data API by default.
+-- Grant the minimum table privileges; RLS below still decides which rows exist.
+grant usage on schema public to anon, authenticated;
+grant select on public.portfolio_projects, public.portfolio_timeline_entries, public.portfolio_settings to anon;
+grant select, insert, update, delete on public.portfolio_projects, public.portfolio_timeline_entries, public.portfolio_settings to authenticated;
+grant select on public.portfolio_admins to authenticated;
+
 create policy "Admins can see their own access" on public.portfolio_admins
 for select to authenticated using ((select auth.uid()) = user_id);
 
