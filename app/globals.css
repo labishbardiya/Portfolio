@@ -23,7 +23,7 @@ body {
   overflow-x: hidden;
   color: var(--ink);
   background: var(--night-deep);
-  font-family: var(--font-cabinet-grotesk), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-synthesis: none;
   -webkit-font-smoothing: antialiased;
 }

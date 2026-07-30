@@ -1,18 +1,14 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Manrope } from "next/font/google";
 import { SiteChrome } from "@/components/site-chrome";
 import "./globals.css";
 
-// Fontshare's Cabinet Grotesk files are kept in-repo so the portfolio does not
-// depend on a third-party font request during a visitor's first render.
-const cabinetGrotesk = localFont({
-  src: [
-    { path: "./fonts/CabinetGrotesk-Regular.woff2", weight: "400", style: "normal" },
-    { path: "./fonts/CabinetGrotesk-Medium.woff2", weight: "500", style: "normal" },
-    { path: "./fonts/CabinetGrotesk-Bold.woff2", weight: "700", style: "normal" },
-    { path: "./fonts/CabinetGrotesk-Extrabold.woff2", weight: "800", style: "normal" },
-  ],
-  variable: "--font-cabinet-grotesk",
+// A variable Google font with the same compact, contemporary grotesk character
+// as Cabinet Grotesk. Next serves it from this site at build time.
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: "variable",
+  variable: "--font-manrope",
   display: "swap",
   fallback: ["Arial", "Helvetica", "sans-serif"],
 });
@@ -25,7 +21,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={cabinetGrotesk.variable}>
+      <body className={manrope.variable}>
         <SiteChrome />
         {children}
       </body>
