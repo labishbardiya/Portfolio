@@ -19,13 +19,6 @@ export function PortfolioHome({ home }: { home: HomeContent }) {
             <Typewriter phrases={home.typewriterPhrases} />
             <InteractiveHoverButton href="/projects" text="See projects" />
           </div>
-          <aside className="status-card" aria-label="Current focus">
-            <div className="status-card-title"><span>now.exe</span><span>● live</span></div>
-            <div className="status-grid">
-              {home.currentFocus.items.slice(0, 3).map((item, index) => <p key={item}><b>{String(index + 1).padStart(2, "0")}</b><span>{item}</span></p>)}
-            </div>
-            <p className="status-caption">{home.currentFocus.caption}</p>
-          </aside>
         </section>
 
         <section className="portfolio-timeline" aria-label="Experience and awards">
