@@ -1,3 +1,5 @@
+import { ProjectsGrid } from "@/components/projects-grid";
+
 export default function ProjectsPage() {
   return (
     <main className="page-shell content-page">
@@ -10,6 +12,7 @@ export default function ProjectsPage() {
         </a>
         .
       </p>
+      <ProjectsGrid />
     </main>
   );
 }
