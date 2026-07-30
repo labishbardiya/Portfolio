@@ -17,7 +17,12 @@ export function StudioLogin({ initialError }: { initialError?: string }) {
     const origin = window.location.origin;
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: `${origin}/auth/callback?next=/studio` },
+      options: {
+        // Studio is invite-only. A typo or stranger's address must never create
+        // a new Auth user merely by requesting a magic link.
+        shouldCreateUser: false,
+        emailRedirectTo: `${origin}/auth/callback?next=/studio`,
+      },
     });
 
     setIsSubmitting(false);
