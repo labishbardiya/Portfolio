@@ -15,8 +15,23 @@ export function Typewriter({ phrases }: TypewriterProps) {
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [visibleText, setVisibleText] = useState("");
   const [deleting, setDeleting] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => setPrefersReducedMotion(mediaQuery.matches);
+
+    updatePreference();
+    mediaQuery.addEventListener("change", updatePreference);
+
+    return () => mediaQuery.removeEventListener("change", updatePreference);
+  }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      return;
+    }
+
     const phrase = phrases[phraseIndex];
     const complete = visibleText === phrase;
     const empty = visibleText.length === 0;
@@ -37,11 +52,14 @@ export function Typewriter({ phrases }: TypewriterProps) {
     }, delay);
 
     return () => window.clearTimeout(timeout);
-  }, [deleting, phraseIndex, phrases, visibleText]);
+  }, [deleting, phraseIndex, phrases, prefersReducedMotion, visibleText]);
+
+  const displayedText = prefersReducedMotion ? (phrases[0] ?? "") : visibleText;
+  const accessibleText = prefersReducedMotion ? (phrases[0] ?? "") : phrases[phraseIndex];
 
   return (
-    <p className="typewriter" aria-label={phrases[phraseIndex]}>
-      {visibleText}
+    <p className="typewriter" aria-label={accessibleText}>
+      {displayedText}
       <span className="typewriter-caret" aria-hidden="true" />
     </p>
   );

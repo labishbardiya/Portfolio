@@ -23,7 +23,8 @@ body {
   overflow-x: hidden;
   color: var(--ink);
   background: var(--night-deep);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-cabinet-grotesk), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-synthesis: none;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -143,11 +144,15 @@ h1, h2, h3, p { margin-top: 0; }
 .window-chrome { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; min-height: 51px; padding: 0 21px; border-bottom: 1px solid var(--line-soft); background: rgb(35 54 48 / 94%); }
 .window-brand { display: flex; align-items: center; gap: 9px; color: var(--ink); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.035em; }
 .window-brand span { display: grid; width: 24px; height: 24px; place-items: center; border-radius: 4px 7px 4px 4px; background: var(--lime); color: var(--night-deep); font-size: 0.62rem; letter-spacing: -0.08em; }
-.window-controls { display: flex; gap: 9px; }
-.window-controls button { display: grid; width: 22px; height: 22px; place-items: center; padding: 0; border: 1px solid rgb(172 186 168 / 66%); border-radius: 5px; background: transparent; color: var(--muted); cursor: pointer; opacity: 0.88; transition: 160ms ease; }
-.window-controls button:hover { border-color: var(--lime); color: var(--lime); background: rgb(208 251 117 / 9%); }
-.window-controls .window-close { border-radius: 50%; }
-.window-controls .window-close:hover { border-color: #ff8b86; background: rgb(255 93 84 / 15%); color: #ffb4ae; }
+.window-controls { display: flex; gap: 0; margin-right: -11px; }
+/* The icon remains compact, while each control owns a 44px touch target. */
+.window-controls button { position: relative; display: grid; width: 44px; height: 44px; place-items: center; padding: 0; border: 0; border-radius: 7px; background: transparent; color: var(--muted); cursor: pointer; opacity: 0.88; transition: color 160ms ease, background 160ms ease; }
+.window-controls button::before { position: absolute; width: 22px; height: 22px; border: 1px solid rgb(172 186 168 / 66%); border-radius: 5px; content: ""; transition: border-color 160ms ease, background 160ms ease; }
+.window-controls button:hover { color: var(--lime); background: rgb(208 251 117 / 5%); }
+.window-controls button:hover::before { border-color: var(--lime); background: rgb(208 251 117 / 9%); }
+.window-controls .window-close::before { border-radius: 50%; }
+.window-controls .window-close:hover { color: #ffb4ae; background: rgb(255 93 84 / 8%); }
+.window-controls .window-close:hover::before { border-color: #ff8b86; background: rgb(255 93 84 / 15%); }
 .window-scroll { height: calc(100% - 51px); overflow-y: auto; overscroll-behavior: contain; scrollbar-color: rgb(208 251 117 / 65%) transparent; scrollbar-width: thin; }
 .window-scroll::-webkit-scrollbar { width: 9px; }
 .window-scroll::-webkit-scrollbar-thumb { border: 2px solid transparent; border-radius: 999px; background: rgb(208 251 117 / 45%); background-clip: padding-box; }
@@ -305,9 +310,9 @@ h1, h2, h3, p { margin-top: 0; }
 
 @media (max-width: 680px) {
   .site-header { top: 8px; width: calc(100% - 16px); }
-  .site-nav { min-height: 70px; align-items: flex-start; padding: 10px; }
-  .nav-links { max-width: calc(100% - 40px); gap: 0; }
-  .nav-links a { padding: 5px 5px; font-size: 0.62rem; }
+  .site-nav { min-height: 64px; align-items: center; gap: 8px; padding: 8px; }
+  .nav-links { flex: 1; flex-wrap: nowrap; max-width: none; gap: 0; }
+  .nav-links a { display: grid; min-width: 44px; min-height: 44px; place-items: center; padding: 4px; font-size: 0.62rem; }
   .world-shell { padding: 93px 12px 12px; }
   .portfolio-window { height: calc(100dvh - 105px); border-radius: 16px; }
   .window-maximized { inset: 78px 8px 8px; height: auto; border-radius: 14px; }
@@ -330,4 +335,29 @@ h1, h2, h3, p { margin-top: 0; }
   .minimized-window .liquid-metal-button { min-width: 0; max-width: calc(100vw - 28px); }
   .about-page { grid-template-columns: 1fr; padding-block: 120px 52px; }
   .about-photo { width: min(100%, 460px); }
+}
+
+/* Preserve the interface's hierarchy when motion is reduced instead of hiding content. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .typewriter-caret { animation: none; opacity: 0; }
+  .liquid-metal-shader { display: none; }
+  .window-controls button,
+  .window-controls button::before,
+  .social-links a,
+  .rail-icon,
+  .interactive-hover-button,
+  .button-label,
+  .button-hover-label,
+  .button-orb,
+  .liquid-metal-button,
+  .project-card { transition: none; }
+  .social-links a:hover,
+  .rail-link:hover .rail-icon,
+  .interactive-hover-button:hover .button-label,
+  .interactive-hover-button:hover .button-hover-label,
+  .interactive-hover-button:hover .button-orb,
+  .liquid-metal-button:hover,
+  .liquid-metal-button[data-pressed="true"],
+  .project-card:hover { transform: none; }
 }
