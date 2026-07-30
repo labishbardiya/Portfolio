@@ -38,9 +38,14 @@ Shared interface pieces live in `components/`, while `app/globals.css` owns the 
 database-enforced Row Level Security; a signed-in account must also exist in
 `public.portfolio_admins` before it can view drafts or change a project.
 
-1. Add the production callback URL (`https://labishbardiya.com/auth/callback`)
-   and the local callback URL (`http://localhost:3000/auth/callback`) under
-   **Supabase → Authentication → URL Configuration**.
+1. The production site currently uses `https://www.labishbardiya.com` as its
+   canonical URL (the root domain redirects there). Under **Supabase →
+   Authentication → URL Configuration**, set **Site URL** to
+   `https://www.labishbardiya.com`, then add these Redirect URLs:
+   - `https://www.labishbardiya.com/auth/callback`
+   - `http://localhost:3000/auth/callback`
+   Add the matching Vercel preview callback only if Studio sign-in needs to
+   work on preview deployments.
 2. Open `/studio`, request a magic link, and complete sign-in.
 3. Add that account's Auth user ID to `portfolio_admins` through the protected
    Supabase admin workflow. The dashboard will show the exact ID while access
@@ -57,7 +62,7 @@ SMTP_PORT=465
 SMTP_USER=resend
 SMTP_PASSWORD=...
 CONTACT_FROM="Labish Bardiya <hello@labishbardiya.com>"
-CONTACT_TO=...
+CONTACT_TO=your-inbox@example.com
 ```
 
 The public `NEXT_PUBLIC_` values are intentionally safe for browser use because
