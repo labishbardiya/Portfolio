@@ -14,7 +14,6 @@ export function PortfolioHome({ home }: { home: HomeContent }) {
       <div className="portfolio-home-inner">
         <section className="hero">
           <div className="hero-copy">
-            <p className="hero-kicker"><span /> Builder mode: on</p>
             <SocialLinks links={home.socialLinks} />
             <h1>Hi, I&apos;m Labish.</h1>
             <Typewriter phrases={home.typewriterPhrases} />

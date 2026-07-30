@@ -7,7 +7,7 @@ type TypewriterProps = {
 };
 
 // Separate timings keep the motion readable while giving the completed phrase a moment to land.
-const TYPING_DELAY = 48;
+const TYPING_DELAY = 90;
 const DELETING_DELAY = 26;
 const HOLD_DELAY = 1450;
 

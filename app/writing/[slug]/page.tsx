@@ -12,7 +12,6 @@ export default async function WritingPostPage({ params }: { params: Promise<{ sl
 
   return (
     <article className="page-shell content-page article-page">
-      <p className="eyebrow">Writing / {post.published_at?.slice(0, 10) ?? "Note"}</p>
       <h1>{post.title}</h1>
       {post.subtitle && <p className="article-subtitle">{post.subtitle}</p>}
       <ExternalPostLink href={post.external_url} />
