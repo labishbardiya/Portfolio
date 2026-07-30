@@ -134,6 +134,7 @@ async function requireStudioAdmin() {
 function refreshPortfolio() {
   revalidatePath("/");
   revalidatePath("/projects");
+  revalidatePath("/writing");
   revalidatePath("/studio");
 }
 
@@ -252,5 +253,78 @@ export async function archiveTimelineEntry(_: StudioActionState, formData: FormD
     return { ok: true, message: "Timeline entry archived." };
   } catch (error) {
     return { ok: false, message: error instanceof Error ? error.message : "Could not archive the timeline entry." };
+  }
+}
+
+function readWritingPost(formData: FormData) {
+  const slug = text(formData, "slug", 100, 1).toLowerCase();
+  if (!slugPattern.test(slug)) throw new Error("slug uses lowercase letters, numbers, and single hyphens only.");
+  const status = text(formData, "status", 12, 1);
+  if (!statusValues.has(status)) throw new Error("Choose draft, published, or archived.");
+  const externalUrl = text(formData, "external_url", 1000);
+  if (externalUrl) {
+    try {
+      if (new URL(externalUrl).protocol !== "https:") throw new Error();
+    } catch {
+      throw new Error("Original-post link needs a valid https URL.");
+    }
+  }
+  return {
+    slug,
+    title: text(formData, "title", 180, 1),
+    subtitle: text(formData, "subtitle", 280),
+    excerpt: text(formData, "excerpt", 500),
+    body_markdown: text(formData, "body_markdown", 50000, 1),
+    external_url: externalUrl || null,
+    status,
+    sort_order: integer(formData, "sort_order", -10000, 10000),
+  };
+}
+
+export async function createWritingPost(_: StudioActionState, formData: FormData): Promise<StudioActionState> {
+  try {
+    const supabase = await requireStudioAdmin();
+    const post = readWritingPost(formData);
+    const { error } = await supabase.from("portfolio_writing_posts").insert({
+      ...post,
+      published_at: post.status === "published" ? new Date().toISOString() : null,
+    });
+    if (error) throw new Error(error.message);
+    refreshPortfolio();
+    return { ok: true, message: "Writing post created." };
+  } catch (error) {
+    return { ok: false, message: error instanceof Error ? error.message : "Could not create the writing post." };
+  }
+}
+
+export async function saveWritingPost(_: StudioActionState, formData: FormData): Promise<StudioActionState> {
+  try {
+    const id = text(formData, "id", 36, 36);
+    const supabase = await requireStudioAdmin();
+    const post = readWritingPost(formData);
+    const { data: existing, error: existingError } = await supabase.from("portfolio_writing_posts").select("published_at").eq("id", id).single();
+    if (existingError || !existing) throw new Error("Writing post no longer exists.");
+    const { error } = await supabase.from("portfolio_writing_posts").update({
+      ...post,
+      published_at: post.status === "published" ? existing.published_at ?? new Date().toISOString() : null,
+    }).eq("id", id);
+    if (error) throw new Error(error.message);
+    refreshPortfolio();
+    return { ok: true, message: "Writing post saved." };
+  } catch (error) {
+    return { ok: false, message: error instanceof Error ? error.message : "Could not save the writing post." };
+  }
+}
+
+export async function archiveWritingPost(_: StudioActionState, formData: FormData): Promise<StudioActionState> {
+  try {
+    const id = text(formData, "id", 36, 36);
+    const supabase = await requireStudioAdmin();
+    const { error } = await supabase.from("portfolio_writing_posts").update({ status: "archived", published_at: null }).eq("id", id);
+    if (error) throw new Error(error.message);
+    refreshPortfolio();
+    return { ok: true, message: "Writing post archived." };
+  } catch (error) {
+    return { ok: false, message: error instanceof Error ? error.message : "Could not archive the writing post." };
   }
 }

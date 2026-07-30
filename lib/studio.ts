@@ -51,3 +51,17 @@ export type StudioTimelineEntry = {
   sort_order: number;
   updated_at: string;
 };
+
+export type StudioWritingPost = {
+  id: string;
+  slug: string;
+  title: string;
+  subtitle: string;
+  excerpt: string;
+  body_markdown: string;
+  external_url: string | null;
+  status: "draft" | "published" | "archived";
+  sort_order: number;
+  published_at: string | null;
+  updated_at: string;
+};

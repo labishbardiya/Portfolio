@@ -10,6 +10,7 @@
 .studio-login-form input, .studio-project-form input, .studio-project-form textarea, .studio-project-form select { width: 100%; border: 1px solid var(--line); border-radius: 7px; outline: 0; background: rgb(3 10 9 / 67%); color: var(--ink); font: inherit; font-size: 0.86rem; line-height: 1.4; }
 .studio-login-form input, .studio-project-form input, .studio-project-form select { min-height: 41px; padding: 9px 10px; }
 .studio-project-form textarea { min-height: 84px; padding: 10px; resize: vertical; }
+.studio-project-form .studio-markdown-input { min-height: 360px; font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.78rem; line-height: 1.6; }
 .studio-login-form input:focus, .studio-project-form input:focus, .studio-project-form textarea:focus, .studio-project-form select:focus { border-color: var(--lime); box-shadow: 0 0 0 3px rgb(208 251 117 / 12%); }
 .studio-login-form button, .studio-project-form > button, .studio-actions button { width: max-content; min-height: 41px; margin-top: 6px; padding: 9px 13px; border: 1px solid var(--lime); border-radius: 7px; background: var(--lime); color: var(--night-deep); cursor: pointer; font: inherit; font-size: 0.75rem; font-weight: 900; transition: 150ms ease; }
 .studio-login-form button:hover:not(:disabled), .studio-project-form > button:hover:not(:disabled), .studio-actions button:hover:not(:disabled) { box-shadow: 3px 4px 0 rgb(208 251 117 / 18%); transform: translateY(-1px); }
