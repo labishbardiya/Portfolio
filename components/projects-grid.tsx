@@ -1,12 +1,12 @@
 import { ArrowUpRight, Code2, Globe2 } from "lucide-react";
-import { projects } from "@/data/projects";
+import type { Project } from "@/data/projects";
 
 const linkIcons = {
   Code: Code2,
   Live: Globe2,
 };
 
-export function ProjectsGrid() {
+export function ProjectsGrid({ projects }: { projects: Project[] }) {
   return (
     <div className="projects-grid">
       {projects.map((project) => (

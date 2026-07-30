@@ -1,6 +1,9 @@
 import { ProjectsGrid } from "@/components/projects-grid";
+import { getPublishedProjects } from "@/lib/portfolio-data";
 
-export default function ProjectsPage() {
+export const dynamic = "force-dynamic";
+
+export default async function ProjectsPage() {
   return (
     <main className="page-shell content-page">
       <p className="eyebrow">Projects</p>
@@ -12,7 +15,7 @@ export default function ProjectsPage() {
         </a>
         .
       </p>
-      <ProjectsGrid />
+      <ProjectsGrid projects={await getPublishedProjects()} />
     </main>
   );
 }
