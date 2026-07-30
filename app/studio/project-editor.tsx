@@ -4,6 +4,14 @@ import { useActionState } from "react";
 import { archiveProject, createProject, saveProject } from "./actions";
 import { emptyStudioActionState, type StudioProject } from "@/lib/studio";
 
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+// Keep the server and every browser byte-for-byte aligned during hydration.
+function formatUpdatedAt(value: string) {
+  const [year, month, day] = new Date(value).toISOString().slice(0, 10).split("-");
+  return `${day} ${MONTHS[Number(month) - 1]} ${year}`;
+}
+
 function ProjectFields({ project }: { project?: StudioProject }) {
   const links = project?.links.map((link) => `${link.label} | ${link.href}`).join("\n") ?? "";
 
@@ -48,7 +56,7 @@ export function ProjectEditor({ project }: { project: StudioProject }) {
 
   return (
     <article className="studio-project-card">
-      <header><div><p>{String(project.number).padStart(2, "0")} / {project.status}</p><h2>{project.name}</h2></div><time dateTime={project.updated_at}>updated {new Date(project.updated_at).toLocaleDateString()}</time></header>
+      <header><div><p>{String(project.number).padStart(2, "0")} / {project.status}</p><h2>{project.name}</h2></div><time dateTime={project.updated_at}>updated {formatUpdatedAt(project.updated_at)}</time></header>
       <form action={saveAction} className="studio-project-form">
         <input type="hidden" name="id" value={project.id} />
         <ProjectFields project={project} />
