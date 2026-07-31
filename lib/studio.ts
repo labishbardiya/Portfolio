@@ -65,3 +65,14 @@ export type StudioWritingPost = {
   published_at: string | null;
   updated_at: string;
 };
+
+export type StudioStoryDoor = {
+  id: string;
+  title: string;
+  body: string;
+  position_x: number;
+  position_y: number;
+  status: "draft" | "published" | "archived";
+  sort_order: number;
+  updated_at: string;
+};

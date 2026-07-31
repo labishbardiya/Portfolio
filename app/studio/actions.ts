@@ -154,6 +154,27 @@ function readTimelineEntry(formData: FormData) {
   };
 }
 
+function decimal(formData: FormData, key: string, minimum: number, maximum: number) {
+  const value = Number(formData.get(key));
+  if (!Number.isFinite(value) || value < minimum || value > maximum) {
+    throw new Error(`${key.replaceAll("_", " ")} must be from ${minimum} to ${maximum}.`);
+  }
+  return value;
+}
+
+function readStoryDoor(formData: FormData) {
+  const status = text(formData, "status", 12, 1);
+  if (!statusValues.has(status)) throw new Error("Choose draft, published, or archived.");
+  return {
+    title: text(formData, "title", 100, 1),
+    body: text(formData, "body", 1400, 1),
+    position_x: decimal(formData, "position_x", 0, 100),
+    position_y: decimal(formData, "position_y", 0, 100),
+    status,
+    sort_order: integer(formData, "sort_order", -10000, 10000),
+  };
+}
+
 export async function createProject(_: StudioActionState, formData: FormData): Promise<StudioActionState> {
   try {
     const supabase = await requireStudioAdmin();
@@ -253,6 +274,44 @@ export async function archiveTimelineEntry(_: StudioActionState, formData: FormD
     return { ok: true, message: "Timeline entry archived." };
   } catch (error) {
     return { ok: false, message: error instanceof Error ? error.message : "Could not archive the timeline entry." };
+  }
+}
+
+export async function createStoryDoor(_: StudioActionState, formData: FormData): Promise<StudioActionState> {
+  try {
+    const supabase = await requireStudioAdmin();
+    const { error } = await supabase.from("portfolio_story_doors").insert(readStoryDoor(formData));
+    if (error) throw new Error(error.message);
+    refreshPortfolio();
+    return { ok: true, message: "Story door created." };
+  } catch (error) {
+    return { ok: false, message: error instanceof Error ? error.message : "Could not create the story door." };
+  }
+}
+
+export async function saveStoryDoor(_: StudioActionState, formData: FormData): Promise<StudioActionState> {
+  try {
+    const id = text(formData, "id", 36, 36);
+    const supabase = await requireStudioAdmin();
+    const { error } = await supabase.from("portfolio_story_doors").update(readStoryDoor(formData)).eq("id", id);
+    if (error) throw new Error(error.message);
+    refreshPortfolio();
+    return { ok: true, message: "Story door saved." };
+  } catch (error) {
+    return { ok: false, message: error instanceof Error ? error.message : "Could not save the story door." };
+  }
+}
+
+export async function archiveStoryDoor(_: StudioActionState, formData: FormData): Promise<StudioActionState> {
+  try {
+    const id = text(formData, "id", 36, 36);
+    const supabase = await requireStudioAdmin();
+    const { error } = await supabase.from("portfolio_story_doors").update({ status: "archived" }).eq("id", id);
+    if (error) throw new Error(error.message);
+    refreshPortfolio();
+    return { ok: true, message: "Door archived. You can restore it by changing its status later." };
+  } catch (error) {
+    return { ok: false, message: error instanceof Error ? error.message : "Could not archive the story door." };
   }
 }
 

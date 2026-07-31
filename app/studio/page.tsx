@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import type { StudioProject, StudioSettings, StudioTimelineEntry, StudioWritingPost } from "@/lib/studio";
+import type { StudioProject, StudioSettings, StudioStoryDoor, StudioTimelineEntry, StudioWritingPost } from "@/lib/studio";
 import { HomeSettingsEditor, NewTimelineEntryForm, TimelineEntryEditor } from "./home-editor";
 import { NewProjectForm, ProjectEditor } from "./project-editor";
 import { NewWritingPostForm, WritingPostEditor } from "./writing-editor";
+import { NewStoryDoorForm, StoryDoorEditor } from "./story-door-editor";
 
 export const dynamic = "force-dynamic";
 
@@ -38,11 +39,12 @@ export default async function StudioPage() {
 
   if (!admin) return <AccessPending userId={userId} email={email} />;
 
-  const [{ data: projects, error: projectsError }, { data: settings, error: settingsError }, { data: timeline, error: timelineError }, { data: posts, error: postsError }] = await Promise.all([
+  const [{ data: projects, error: projectsError }, { data: settings, error: settingsError }, { data: timeline, error: timelineError }, { data: posts, error: postsError }, { data: storyDoors, error: storyDoorsError }] = await Promise.all([
     supabase.from("portfolio_projects").select("id, name, slug, number, stage, description, tags, links, cover_url, status, featured, sort_order, updated_at").order("sort_order", { ascending: true }),
     supabase.from("portfolio_settings").select("id, typewriter_lines, social_links, current_focus, is_published, updated_at").eq("id", true).single(),
     supabase.from("portfolio_timeline_entries").select("id, category, period, title, organisation, description, status, sort_order, updated_at").order("category", { ascending: true }).order("sort_order", { ascending: true }),
     supabase.from("portfolio_writing_posts").select("id, slug, title, subtitle, excerpt, body_markdown, external_url, status, sort_order, published_at, updated_at").order("updated_at", { ascending: false }),
+    supabase.from("portfolio_story_doors").select("id, title, body, position_x, position_y, status, sort_order, updated_at").order("sort_order", { ascending: true }),
   ]);
 
   return (
@@ -53,6 +55,7 @@ export default async function StudioPage() {
       </header>
       <section className="studio-summary"><p><strong>{projects?.filter((project) => project.status === "published").length ?? 0}</strong> published</p><p><strong>{projects?.filter((project) => project.status === "draft").length ?? 0}</strong> drafts</p><p><strong>{projects?.filter((project) => project.status === "archived").length ?? 0}</strong> archived</p></section>
       {settingsError || !settings ? <p className="studio-feedback">Could not load homepage settings. Refresh and try again.</p> : <HomeSettingsEditor settings={settings as StudioSettings} />}
+      <section className="studio-projects" aria-labelledby="story-doors-heading"><div className="studio-section-title"><div><h2 id="story-doors-heading">Story doors</h2><p>Place a small door anywhere on the public site. A visitor finds the thought behind it.</p></div><NewStoryDoorForm /></div>{storyDoorsError ? <p className="studio-feedback">Could not load story doors. Apply the latest Studio migration, then refresh.</p> : <div className="studio-project-list">{(storyDoors as StudioStoryDoor[] | null)?.map((door) => <StoryDoorEditor key={door.id} door={door} />)}</div>}</section>
       <section className="studio-projects" aria-labelledby="timeline-heading"><div className="studio-section-title"><div><p className="studio-kicker">Homepage proof</p><h2 id="timeline-heading">Experience & awards</h2></div><NewTimelineEntryForm /></div>{timelineError ? <p className="studio-feedback">Could not load timeline entries. Refresh and try again.</p> : <div className="studio-project-list">{(timeline as StudioTimelineEntry[] | null)?.map((entry) => <TimelineEntryEditor key={entry.id} entry={entry} />)}</div>}</section>
       <section className="studio-projects" aria-labelledby="projects-heading"><div className="studio-section-title"><div><p className="studio-kicker">Content</p><h2 id="projects-heading">Projects</h2></div><NewProjectForm /></div>{projectsError ? <p className="studio-feedback">Could not load projects. Refresh and try again.</p> : <div className="studio-project-list">{(projects as StudioProject[] | null)?.map((project) => <ProjectEditor key={project.id} project={project} />)}</div>}</section>
       <section className="studio-projects" aria-labelledby="writing-heading"><div className="studio-section-title"><div><p className="studio-kicker">Publishing</p><h2 id="writing-heading">Writing</h2></div><NewWritingPostForm /></div>{postsError ? <p className="studio-feedback">Could not load writing posts. Refresh and try again.</p> : <div className="studio-project-list">{(posts as StudioWritingPost[] | null)?.map((post) => <WritingPostEditor key={post.id} post={post} />)}</div>}</section>
